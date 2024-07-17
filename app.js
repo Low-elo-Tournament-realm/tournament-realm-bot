@@ -7,7 +7,10 @@ import {
     MessageComponentTypes,
     ButtonStyleTypes,
 } from 'discord-interactions';
-import { VerifyDiscordRequest } from './utils.js';
+import {
+    VerifyDiscordRequest,
+    InstallGlobalCommands
+} from './utils.js';
 import { ALL_COMMANDS } from './init_commands.js';
 
 // Create an express app
@@ -17,13 +20,18 @@ const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
-// Store for in-progress games. In production, you'd want to use a DB
-const activeGames = {};
+app.get('/tos', async function (req, res) {
+    return res.send("Under development.");
+});
+
+app.get('/privacy-policy', async function (req, res) {
+    return res.send("Under development.");
+});
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
-app.post('/interactions', async function(req, res) {
+app.post('/interactions', async function (req, res) {
     // Interaction type and data
     const { type, id, data } = req.body;
 
@@ -50,5 +58,6 @@ app.post('/interactions', async function(req, res) {
 });
 
 app.listen(PORT, () => {
+    InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS.map((command_class) => command_class.command_data));
     console.log('Listening on port', PORT);
 });

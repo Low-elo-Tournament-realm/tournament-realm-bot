@@ -21,16 +21,14 @@ class ScheduleMessagesCommand {
 		return {
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
-				title: "Setup this message's schedule",
-				components: [
-					{
-						custom_id: "pesho",
-						type: componentTypes.Button,
-						style: 5,
-						url: "google.com",
-						label: "click me"
-					}
-				]
+				allowed_mentions: true,
+				poll: {
+					question: "Test?",
+					answers: [
+						{ answer_id: 10, poll_media: { text: "hi" } },
+						{ answer_id: 2, poll_media: { text: "hi2" } },
+					]
+				}
 			}
 		};
 	}
