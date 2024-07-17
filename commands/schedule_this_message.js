@@ -4,7 +4,7 @@ import {
 	InteractionResponseType,
 } from 'discord-interactions';
 
-function getRandomEmoji() {
+async function getRandomEmoji() {
 	const emojiList = ['😭', '😄', '😌', '🤓', '😎', '😤', '🤖', '😶‍🌫️', '🌏', '📸', '💿', '👋', '🌊', '✨'];
 	return emojiList[Math.floor(Math.random() * emojiList.length)];
 }
@@ -21,7 +21,7 @@ class ScheduleThisMessageCommand {
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
 				// Fetches a random emoji to send from a helper function
-				content: 'hello world ' + getRandomEmoji(),
+				content: 'hello world ' + await getRandomEmoji(),
 			},
 		};
 	}
