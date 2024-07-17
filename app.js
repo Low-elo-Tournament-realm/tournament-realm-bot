@@ -1,14 +1,14 @@
 import 'dotenv/config';
 import express from 'express';
 import {
-  InteractionType,
-  InteractionResponseType,
-  InteractionResponseFlags,
-  MessageComponentTypes,
-  ButtonStyleTypes,
+    InteractionType,
+    InteractionResponseType,
+    InteractionResponseFlags,
+    MessageComponentTypes,
+    ButtonStyleTypes,
 } from 'discord-interactions';
-import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
-import { getShuffledOptions, getResult } from './game.js';
+import { VerifyDiscordRequest } from './utils.js';
+import { ALL_COMMANDS } from './init_commands.js';
 
 // Create an express app
 const app = express();
@@ -23,38 +23,32 @@ const activeGames = {};
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
-app.post('/interactions', async function (req, res) {
-  // Interaction type and data
-  const { type, id, data } = req.body;
+app.post('/interactions', async function(req, res) {
+    // Interaction type and data
+    const { type, id, data } = req.body;
 
-  /**
-   * Handle verification requests
-   */
-  if (type === InteractionType.PING) {
-    return res.send({ type: InteractionResponseType.PONG });
-  }
-
-  /**
-   * Handle slash command requests
-   * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
-   */
-  if (type === InteractionType.APPLICATION_COMMAND) {
-    const { name } = data;
-
-    // "test" command
-    if (name === 'test') {
-      // Send a message into the channel where command was triggered from
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          // Fetches a random emoji to send from a helper function
-          content: 'hello world ' + getRandomEmoji(),
-        },
-      });
+    /**
+     * Handle verification requests
+     */
+    if (type === InteractionType.PING) {
+        return res.send({ type: InteractionResponseType.PONG });
     }
-  }
+
+    /**
+     * Handle slash command requests
+     * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
+     */
+    if (type === InteractionType.APPLICATION_COMMAND) {
+        const { name } = data;
+
+        for (let command of ALL_COMMANDS) {
+            if (name == command.command_data.name) {
+                return res.send(command.execute(res, data));
+            }
+        }
+    }
 });
 
 app.listen(PORT, () => {
-  console.log('Listening on port', PORT);
+    console.log('Listening on port', PORT);
 });
