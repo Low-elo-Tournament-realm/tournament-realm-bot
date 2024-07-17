@@ -16,7 +16,15 @@ class ScheduleMessagesCommand {
 		return {
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
-				content: 'Hello there'
+				content: 'Hello there',
+				poll: {
+					question: { text: "text?" },
+					answers: [
+						{answer_id: 1, poll_media: { text: "test1" }},
+						{answer_id: 2, poll_media: { text: "test2" }},
+					],
+					allow_multiselect: true
+				}
 			}
 		};
 	}
