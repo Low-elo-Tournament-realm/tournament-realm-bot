@@ -4,10 +4,10 @@ import {
 	InteractionResponseType,
 } from 'discord-interactions';
 
-class ScheduleMessagesCommand {
+class TestCommand {
 	static command_data = {
-		name: 'schedule_message',
-		description: 'Schedule a message to be sent in the future or even many times in the future.',
+		name: 'test',
+		description: 'Test',
 		type: applicationCommandTypes.CHAT_SLASH_COMMAND,
 	};
 
@@ -16,10 +16,11 @@ class ScheduleMessagesCommand {
 		return {
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
-				content: 'Hello there'
-			}
+				// Fetches a random emoji to send from a helper function
+				content: 'hello world ',
+			},
 		};
 	}
 }
 
-export default ScheduleMessagesCommand;
+export default TestCommand;

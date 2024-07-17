@@ -13,6 +13,8 @@ import {
 } from './utils.js';
 import { ALL_COMMANDS } from './init_commands.js';
 
+InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS.map((command_class) => command_class.command_data));
+
 // Create an express app
 const app = express();
 // Get port, or default to 3000
@@ -51,13 +53,12 @@ app.post('/interactions', async function (req, res) {
 
         for (let command of ALL_COMMANDS) {
             if (name == command.command_data.name) {
-                return res.send(command.execute(res, data));
+                return res.send(await command.execute(res, data));
             }
         }
     }
 });
-
+    
 app.listen(PORT, () => {
-    InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS.map((command_class) => command_class.command_data));
     console.log('Listening on port', PORT);
 });
